@@ -18,12 +18,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      
-      # - name: Clean Gradle cache
-      #   if: matrix.os == 'ubuntu-latest'
-      #   run: |
-      #     cd android
-      #     ./gradlew clean
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -71,11 +65,13 @@ jobs:
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             flutter build windows --release
             mv build/windows/x64/runner/Release/work_rest_timer_flutter.exe build/windows/x64/runner/Release/app-$VERSION-windows.exe
+            # 将 DLL 文件与 exe 一起打包成 zip
+            cd build/windows/x64/runner/Release
+            zip -r app-$VERSION-windows.zip .
           elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
             flutter build macos --release
             cd build/macos/Build/Products/Release
-            mv work_rest_timer_flutter.app app-$VERSION-macos.app
-            ditto -c -k --sequesterRsrc --keepParent app-$VERSION-macos.app app-$VERSION-macos.zip
+            zip -r app-$VERSION-maos.zip .
           fi
 
       - name: Upload artifacts
@@ -85,8 +81,8 @@ jobs:
           path: |
             ${{ 
               matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/*.apk' || 
-              matrix.os == 'windows-latest' && 'build/windows/x64/runner/Release/*.exe' || 
-              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app'
+              matrix.os == 'windows-latest' && 'build/windows/x64/runner/Release/app-$VERSION-windows.zip' || 
+              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/app-$VERSION-maos.zip'
             }}
           if-no-files-found: error
 
@@ -107,8 +103,8 @@ jobs:
         with:
           files: |
             artifacts/build-ubuntu-latest/*.apk
-            artifacts/build-windows-latest/*.exe
-            artifacts/build-macos-latest/*.app
+            artifacts/build-windows-latest/*.zip
+            artifacts/build-macos-latest/*.zip
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
         env:
