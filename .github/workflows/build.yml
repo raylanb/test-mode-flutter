@@ -79,7 +79,7 @@ jobs:
             ${{ 
               matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/app-release.apk' || 
               matrix.os == 'windows-latest' && 'build/windows/x64/runner/Release/*.exe' || 
-              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app' 
+              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app/**/*'
             }}
           if-no-files-found: error
 
@@ -100,9 +100,8 @@ jobs:
         with:
           files: |
             artifacts/build-ubuntu-latest/app-release.apk
-            artifacts/build-ubuntu-latest/app-release.aab
             artifacts/build-windows-latest/*.exe
-            artifacts/build-macos-latest/*.app
+            artifacts/build-macos-latest/**/*.app/**/*
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
         env:
