@@ -36,8 +36,10 @@ jobs:
           flutter-version: '3.27.2'
           channel: 'stable'
       
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Clean and get dependencies
+        run: |
+          flutter clean
+          flutter pub get
         
       - name: Setup Android SDK
         if: matrix.os == 'ubuntu-latest'
