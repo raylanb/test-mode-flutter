@@ -66,8 +66,9 @@ jobs:
             flutter build windows --release
             mv build/windows/x64/runner/Release/work_rest_timer_flutter.exe build/windows/x64/runner/Release/app-$VERSION-windows.exe
             # 将 DLL 文件与 exe 一起打包成 zip
+            choco install 7zip -y
             cd build/windows/x64/runner/Release
-            zip -r app-$VERSION-windows.zip .
+            7z a app-$VERSION-windows.zip .
           elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
             flutter build macos --release
             cd build/macos/Build/Products/Release
