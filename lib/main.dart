@@ -25,8 +25,24 @@ class MyApp extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           title: '工作休息平衡计时器',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: ThemeData(
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.white, // 白天使用白色背景
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(color: Colors.black), // 设置默认文本颜色
+              bodyMedium: TextStyle(color: Colors.black),
+              bodySmall: TextStyle(color: Colors.black),
+            ),
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.grey[800], // 晚上使用灰色背景
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(color: Colors.white), // 设置默认文本颜色
+              bodyMedium: TextStyle(color: Colors.white),
+              bodySmall: TextStyle(color: Colors.white),
+            ),
+          ),
           themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
           home: const TimerScreen(),
         );

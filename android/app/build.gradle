@@ -55,3 +55,8 @@ android {
 flutter {
     source '../..'
 }
+
+def javaHome = System.getenv('JAVA_HOME')
+if (javaHome) {
+    project.ext.set('org.gradle.java.home', javaHome)
+}

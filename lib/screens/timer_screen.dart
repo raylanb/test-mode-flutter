@@ -11,9 +11,10 @@ class TimerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TimerProvider>(
-      builder: (context, timerProvider, child) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
         return Scaffold(
+          backgroundColor: themeProvider.isDark ? Colors.grey[800] : Colors.white, // 根据主题设置背景色
           body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -23,17 +24,25 @@ class TimerScreen extends StatelessWidget {
                   children: [
                     _buildHeader(context),
                     const SizedBox(height: 24),
-                    _buildTargetDurationInput(context, timerProvider),
+                    _buildTargetDurationInput(context, context.read<TimerProvider>()),
                     const SizedBox(height: 24),
-                    _buildTimeDisplays(context, timerProvider),
+                    _buildTimeDisplays(context, context.read<TimerProvider>()),
                     const SizedBox(height: 24),
-                    ProgressBar(
-                      progress: timerProvider.progressPercentage,
+                    Consumer<TimerProvider>(
+                      builder: (context, timerProvider, child) {
+                        return ProgressBar(
+                          progress: timerProvider.progressPercentage,
+                        );
+                      },
                     ),
                     const SizedBox(height: 24),
-                    _buildControls(context, timerProvider),
+                    _buildControls(context, context.read<TimerProvider>()),
                     const SizedBox(height: 24),
-                    StatsCard(timerProvider: timerProvider),
+                    Consumer<TimerProvider>(
+                      builder: (context, timerProvider, child) {
+                        return StatsCard(timerProvider: timerProvider);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -50,13 +59,16 @@ class TimerScreen extends StatelessWidget {
       children: [
         Text(
           '工作休息平衡计时器',
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: context.read<ThemeProvider>().isDark ? Colors.white : Colors.black, // 根据主题设置文字颜色
+              ),
         ),
         IconButton(
           icon: Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {
               return Icon(
                 themeProvider.isDark ? Icons.light_mode : Icons.dark_mode,
+                color: themeProvider.isDark ? Colors.white : Colors.black, // 根据主题设置图标颜色
               );
             },
           ),
@@ -74,14 +86,22 @@ class TimerScreen extends StatelessWidget {
       children: [
         Text(
           '目标时间（分钟）',
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: context.read<ThemeProvider>().isDark ? Colors.white : Colors.black, // 根据主题设置文字颜色
+              ),
         ),
         const SizedBox(height: 8),
         TextField(
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
             hintText: '输入目标时间',
+            hintStyle: TextStyle(
+              color: context.read<ThemeProvider>().isDark ? Colors.grey[400] : Colors.grey[600], // 根据主题设置提示文字颜色
+            ),
+          ),
+          style: TextStyle(
+            color: context.read<ThemeProvider>().isDark ? Colors.white : Colors.black, // 根据主题设置输入文字颜色
           ),
           onChanged: (value) {
             final minutes = int.tryParse(value);
