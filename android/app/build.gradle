@@ -25,8 +25,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+        versionCode flutterVersionCode
+        versionName flutterVersionName
     }
 
     signingConfigs {
@@ -59,4 +59,28 @@ flutter {
 def javaHome = System.getenv('JAVA_HOME')
 if (javaHome) {
     project.ext.set('org.gradle.java.home', javaHome)
+}
+def flutterVersionCode = getFlutterVersionCode()
+def flutterVersionName = getFlutterVersionName()
+
+def getFlutterVersionCode() {
+    def versionFile = file('../../pubspec.yaml') // 修改路径
+    def versionText = versionFile.text
+    def versionPattern = ~/version:\s*(\d+\.\d+\.\d+)\+(\d+)/
+    def versionMatch = versionText =~ versionPattern
+    if (versionMatch) {
+        return versionMatch[0][2].toInteger() // 获取构建号
+    }
+    throw new GradleException("Could not find version code in pubspec.yaml")
+}
+
+def getFlutterVersionName() {
+    def versionFile = file('../../pubspec.yaml') // 修改路径
+    def versionText = versionFile.text
+    def versionPattern = ~/version:\s*(\d+\.\d+\.\d+)\+(\d+)/
+    def versionMatch = versionText =~ versionPattern
+    if (versionMatch) {
+        return versionMatch[0][1] // 获取版本号
+    }
+    throw new GradleException("Could not find version name in pubspec.yaml")
 }
