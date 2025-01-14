@@ -99,9 +99,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            artifacts/build/app/outputs/flutter-apk/app-release.apk
-            artifacts/build/app/outputs/bundle/release/app-release.aab
-            artifacts/build/windows/runner/Release/*.exe
-            artifacts/build/macos/Build/Products/Release/*.app
+            artifacts/build-ubuntu-latest/app-release.apk
+            artifacts/build-ubuntu-latest/app-release.aab
+            artifacts/build-windows-latest/*.exe
+            artifacts/build-macos-latest/*.app
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
