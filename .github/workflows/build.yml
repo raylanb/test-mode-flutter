@@ -67,7 +67,7 @@ jobs:
             flutter build apk --release --build-name=$VERSION --build-number=1
             mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/app-$VERSION-android.apk
             flutter build apk --release --target-platform=android-arm64 --build-name=$VERSION --build-number=1
-            mv build/app/outputs/flutter-apk/app-arm64-release.apk build/app/outputs/flutter-apk/app-$VERSION-android-arm64.apk
+            mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/app-$VERSION-android-arm64.apk
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             flutter build windows --release
             mv build/windows/x64/runner/Release/work_rest_timer_flutter.exe build/windows/x64/runner/Release/app-$VERSION-windows.exe
