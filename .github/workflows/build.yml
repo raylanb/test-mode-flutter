@@ -78,7 +78,7 @@ jobs:
           path: |
             ${{ 
               matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/app-release.apk' || 
-              matrix.os == 'windows-latest' && 'build/windows/runner/Release/*.exe' || 
+              matrix.os == 'windows-latest' && 'build/windows/x64/runner/Release/*.exe' || 
               matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app' 
             }}
           if-no-files-found: error
