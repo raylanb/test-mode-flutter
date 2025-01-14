@@ -10,6 +10,7 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -23,7 +24,12 @@ class ProgressBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress / 100,
             minHeight: 8,
-            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            backgroundColor: Color.fromRGBO(
+              primaryColor.r.toInt(),
+              primaryColor.g.toInt(),
+              primaryColor.b.toInt(),
+              0.2,
+            ),
           ),
         ),
       ],

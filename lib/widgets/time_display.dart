@@ -27,16 +27,22 @@ class TimeDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isActive
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+            ? Color.fromRGBO(
+                primaryColor.r.toInt(),
+                primaryColor.g.toInt(),
+                primaryColor.b.toInt(),
+                0.1,
+              )
             : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isActive
-              ? Theme.of(context).colorScheme.primary
+              ? primaryColor
               : Theme.of(context).dividerColor,
         ),
       ),
@@ -50,7 +56,7 @@ class TimeDisplay extends StatelessWidget {
           Text(
             _formatTime(time),
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: primaryColor,
                 ),
           ),
           if (totalTime != null) ...[
