@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Clean Gradle cache
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          ./gradlew clean
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -37,6 +42,9 @@ jobs:
       - name: Setup Android SDK
         if: matrix.os == 'ubuntu-latest'
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 33
+          build-tools: 33.0.2
 
       - name: Create keystore properties
         if: matrix.os == 'ubuntu-latest'
@@ -50,6 +58,7 @@ jobs:
       - name: Build
         run: |
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk/17.0.13-11/x64
             flutter build apk --release
             flutter build appbundle --release
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
