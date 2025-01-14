@@ -19,11 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Clean Gradle cache
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          cd android
-          ./gradlew clean
+      # - name: Clean Gradle cache
+      #   if: matrix.os == 'ubuntu-latest'
+      #   run: |
+      #     cd android
+      #     ./gradlew clean
 
       - name: Setup Java
         uses: actions/setup-java@v3
