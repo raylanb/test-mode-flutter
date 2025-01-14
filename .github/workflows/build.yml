@@ -76,10 +76,11 @@ jobs:
         with:
           name: build-${{ matrix.os }}
           path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-            build/windows/runner/Release/*.exe
-            build/macos/Build/Products/Release/*.app
+            ${{ 
+              matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/app-release.apk' || 
+              matrix.os == 'windows-latest' && 'build/windows/runner/Release/*.exe' || 
+              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app' 
+            }}
           if-no-files-found: error
 
   release:
