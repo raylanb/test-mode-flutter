@@ -64,11 +64,14 @@ jobs:
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
             export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk/17.0.13-11/x64
             flutter build apk --release
+            flutter build apk --release --target-platform=android-arm64
             flutter build appbundle --release
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             flutter build windows --release
           elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
             flutter build macos --release
+            cd build/macos/Build/Products/Release
+            ditto -c -k --sequesterRsrc --keepParent work_rest_timer_flutter.app work_rest_timer_flutter.zip
           fi
 
       - name: Upload artifacts
@@ -77,9 +80,9 @@ jobs:
           name: build-${{ matrix.os }}
           path: |
             ${{ 
-              matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/app-release.apk' || 
+              matrix.os == 'ubuntu-latest' && 'build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/flutter-apk/app-arm64-release.apk ' || 
               matrix.os == 'windows-latest' && 'build/windows/x64/runner/Release/*.exe' || 
-              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/*.app/**/*'
+              matrix.os == 'macos-latest' && 'build/macos/Build/Products/Release/work_rest_timer_flutter.app'
             }}
           if-no-files-found: error
 
@@ -100,8 +103,9 @@ jobs:
         with:
           files: |
             artifacts/build-ubuntu-latest/app-release.apk
+            artifacts/build-ubuntu-latest/app-arm64-release.apk
             artifacts/build-windows-latest/*.exe
-            artifacts/build-macos-latest/**/*.app/**/*
+            artifacts/build-macos-latest/work_rest_timer_flutter.app
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
         env:
